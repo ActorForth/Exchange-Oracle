@@ -1,0 +1,18 @@
+version: "3"
+services:
+  flask:
+    container_name: oracle
+    image: oracle-image
+    ports: 
+      - 0.0.0.0:2222:2222
+    volumes:
+      - ./data/:/app/data/
+    hostname: "bitcoin-bridging"
+    command: gunicorn --bind 0.0.0.0:2222 --timeout=600 exchange:app -w 1 --threads 5
+  
+
+networks:
+  default:
+    external:
+      name: bitcoin-bridging
+    
