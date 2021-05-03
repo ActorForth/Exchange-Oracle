@@ -11,9 +11,9 @@ from flask_restful import Resource, Api
 
 
 logging.basicConfig(filename='history.log', filemode='w', level=logging.DEBUG)
-EXCHANGE_PORT = 2222
-LISTENING_PORT = "0.0.0.0"
-DEBUG_MODE = True
+PORT = os.environ.get("PORT", "2222")
+HOST = os.environ.get("HOST", "0.0.0.0")
+DEBUG_MODE = os.environ.get("DEBUG", True)
 
 last_rate = {}
 # mutex = threading.Lock()
@@ -99,5 +99,5 @@ api.add_resource(GetRate, '/api/get_rate/', resource_class_kwargs={
 
 if __name__ == '__main__':
     app.run(debug=DEBUG_MODE,
-        host=LISTENING_PORT,
-        port=EXCHANGE_PORT) 
+        host=HOST,
+        port=PORT) 
