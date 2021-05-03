@@ -10,14 +10,16 @@ from flask import Flask
 from flask_restful import Resource, Api
 
 
-logging.basicConfig(filename='error.log', filemode='w', level=logging.DEBUG)
+logging.basicConfig(filename='history.log', filemode='w', level=logging.DEBUG)
 EXCHANGE_PORT = 2222
 LISTENING_PORT = "0.0.0.0"
 DEBUG_MODE = True
 
 last_rate = {}
-mutex = threading.Lock()
+# mutex = threading.Lock()
 bitkub_url = "https://api.bitkub.com/api/market/ticker?sym=THB_BCH"
+
+NEW_RESULT_INTERVAL = 10 # Seconds
 
 class Rates:
 
@@ -27,15 +29,11 @@ class Rates:
     def get_rate(self):
         return self.bitkub_rates
 
-    # def get_all_rates(self):
-    #     return self._events
-
     def add_rate(self, info):
             self.bitkub_rates = info
 
 
 def start_rate_thread(rates):
-    # print("starting", file=sys.stderr)
     logging.debug("starting")
     rate_thread = threading.Thread(target=rate_fetcher, args=(rates,))
     rate_thread.daemon = True
@@ -45,22 +43,18 @@ def start_rate_thread(rates):
 def rate_fetcher(rates):
     while True:
         rates = rates
-        result = requests.get(bitkub_url)
-        # app.logger(result)
-        logging.debug("grabbing new rate:")
-        logging.debug(f"result: {result.json()}")
-        rates.add_rate(result.json())
-        # print(f"\nrate: {last_rate}")
-        # print(f"\nrate: {last_rate[0]}")
-        # print(f"\nrate: {type(last_rate)}")
-        time.sleep(10)
+        try:
+            result = requests.get(bitkub_url)
+            logging.debug("grabbing new rate:")
+            logging.debug(f"result: {result.json()}")
+            rates.add_rate(result.json())
+        except Exception as err:
+            logging.debug(f"An error occurred: {err}")
+            pass
+        finally:
+            time.sleep(NEW_RESULT_INTERVAL)
 
     
-
-
-class HelloWorld(Resource):
-    def get(self):
-        return {'hello': 'world'}
 
 class GetRate(Resource):
     def __init__(self, **kwargs):
@@ -81,11 +75,9 @@ class Exchange(Flask):  # pragma: no cover
         ev_list=None,
         **options,
     ):
-        logging.debug("before if")
         if not self.debug or os.getenv("WERKZEUG_RUN_MAIN") == "true":
             with self.app_context():
-                logging.debug("starting app")
-
+                pass
 
             super(Exchange, self).run(
                 host=host,
@@ -99,12 +91,9 @@ class Exchange(Flask):  # pragma: no cover
 rates = Rates()
 start_rate_thread(rates)
 
-logging.debug("before app")
 app = Exchange(__name__)
-logging.debug("after app")
 api = Api(app)
 
-api.add_resource(HelloWorld, '/')
 api.add_resource(GetRate, '/api/get_rate/', resource_class_kwargs={
         "rates": rates})
 
