@@ -1,3 +1,3 @@
 #!/bin/bash
-app="oracle-image"
+app="crypto-oracle"
 docker build -t ${app} .
