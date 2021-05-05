@@ -11,6 +11,7 @@ from flask_restful import Resource, Api
 
 
 logging.basicConfig(filename='history.log', filemode='w', level=logging.DEBUG)
+
 PORT = os.environ.get("PORT", "2222")
 HOST = os.environ.get("HOST", "0.0.0.0")
 DEBUG_MODE = os.environ.get("DEBUG", True)
@@ -22,7 +23,7 @@ bitkub_url = "https://api.bitkub.com/api/market/ticker?sym=THB_BCH"
 NEW_RESULT_INTERVAL = 10 # Seconds
 
 class Rates:
-
+    # Stores current rates out of global scope
     def __init__(self):
         self.bitkub_rates = {}
 
@@ -33,6 +34,7 @@ class Rates:
             self.bitkub_rates = info
 
 
+# rates class gets passed so thread has access
 def start_rate_thread(rates):
     logging.debug("starting")
     rate_thread = threading.Thread(target=rate_fetcher, args=(rates,))
@@ -40,10 +42,12 @@ def start_rate_thread(rates):
     rate_thread.start()
     return
 
+# rates class gets passed so thread has access
 def rate_fetcher(rates):
     while True:
         rates = rates
         try:
+            # get current exchange rate from bitkub
             result = requests.get(bitkub_url)
             logging.debug("grabbing new rate:")
             logging.debug(f"result: {result.json()}")
@@ -60,7 +64,8 @@ class GetRate(Resource):
     def __init__(self, **kwargs):
         self.rates = kwargs["rates"]
 
-    def get(self):
+    def get(self, amount, denomination):
+        # Format in docs
         return {"thb-bch": self.rates.get_rate()}
     
 
@@ -94,7 +99,7 @@ start_rate_thread(rates)
 app = Exchange(__name__)
 api = Api(app)
 
-api.add_resource(GetRate, '/api/get_rate/', resource_class_kwargs={
+api.add_resource(GetRate, '/api/get_rate/<amount>/<denomination>', resource_class_kwargs={
         "rates": rates})
 
 if __name__ == '__main__':
