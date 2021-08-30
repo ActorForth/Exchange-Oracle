@@ -2,7 +2,8 @@ version: "3"
 services:
   crypto-oracle:
     container_name: crypto-oracle
-    image: crypto-oracle 
+    image: crypto-oracle
+    build: ./
     ports: 
       - "2222:2222"
     volumes:

@@ -1,8 +1,8 @@
-FROM python:3.7
+FROM python:3.7.11-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y python-pip python3.7 python3-setuptools autoconf libtool pkg-config python3-dev build-essential
+RUN apt-get update && apt-get install
 
 COPY ./requirements.txt /app/requirements.txt
 COPY ./exchange.py /app/exchange.py
@@ -16,4 +16,4 @@ COPY ./exchange.py /app/exchange.py
 
 RUN pip install -r requirements.txt
 
-CMD ["python3", "exchange.py"]
+CMD ["gunicorn", "--bind 0.0.0.0:2222", "--timeout=600", "exchange:app", "-w 1", "--threads 5"]
