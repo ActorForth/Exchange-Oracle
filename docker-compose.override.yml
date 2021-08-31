@@ -1,0 +1,5 @@
+version: "3.7"
+services:
+  crypto-oracle:
+    ports: 
+      - "2222:2222"
