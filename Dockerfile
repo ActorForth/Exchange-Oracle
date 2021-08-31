@@ -14,6 +14,6 @@ COPY ./exchange.py /app/exchange.py
 
 #EXPOSE 2222
 
-RUN pip install -r requirements.txt
+RUN pip install -r /app/requirements.txt
 
 CMD ["gunicorn", "--bind 0.0.0.0:2222", "--timeout=600", "exchange:app", "-w 1", "--threads 5"]
