@@ -1,0 +1,19 @@
+{
+	"id": "31c0980d-7b43-426e-8f45-f405b24b54ab",
+	"values": [
+		{
+			"key": "guid",
+			"value": "{{$guid}}",
+			"enabled": true
+		},
+		{
+			"key": "created_guid",
+			"value": "",
+			"enabled": true
+		}
+	],
+	"name": "Provider Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2021-09-27T18:29:18.430Z",
+	"_postman_exported_using": "Postman/8.12.2"
+}
