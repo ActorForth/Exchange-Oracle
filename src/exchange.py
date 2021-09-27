@@ -36,7 +36,7 @@ class Rates:
 
 
 # rates class gets passed so thread has access
-def start_rate_thread(rates):
+def start_rate_thread(rates): # pragma: no cover
     logging.debug("starting")
     rate_thread = threading.Thread(target=rate_fetcher, args=(rates,))
     rate_thread.daemon = True
@@ -44,7 +44,7 @@ def start_rate_thread(rates):
     return
 
 # rates class gets passed so thread has access
-def rate_fetcher(rates):
+def rate_fetcher(rates): # pragma: no cover
     while True:
         rates = rates
         try:
@@ -53,20 +53,23 @@ def rate_fetcher(rates):
             usd_result = requests.get(usd_exchange_rate_url)
             logging.debug("grabbing new rate:")
             logging.debug(f"result: {thb_result.json()}")
+            logging.debug(f"result: {usd_result.json()}")
             
             thb_json = thb_result.json()
             usd_json = usd_result.json()
             
             thb_rate = {
-                "last": thb_json["THB_BCH"]["last"],
+                "last": str(thb_json["THB_BCH"]["last"]),
                 "raw": thb_json,
-                "from": bitkub_url
+                "from": bitkub_url,
+                "timestamp": time.time()
             }
             
             usd_rate = {
                 "last": usd_json["last"],
                 "raw": usd_json,
-                "from": usd_exchange_rate_url
+                "from": usd_exchange_rate_url,
+                "timestamp": usd_json["timestamp"]
             }
             
             rates.add_rate("thb", thb_rate)
@@ -85,12 +88,11 @@ class GetRate(Resource):
 
     def get(self, denomination):
         # Format in docs
-        
         rate = self.rates.get_rate(denomination)
         if not rate:
-            return {"This denomination is not available"}, 404
+            return {"message": "This denomination is not available"}, 404
         
-        return {"last": self.rates.get_rate()}, 200
+        return {"last": rate["last"]}, 200
 
 
 class Exchange(Flask):  # pragma: no cover
