@@ -5,7 +5,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install
 
 COPY ./requirements.txt /app/requirements.txt
-COPY ./exchange.py /app/exchange.py
+COPY ./src/exchange.py /app/exchange.py
 
 #COPY . /app
 
