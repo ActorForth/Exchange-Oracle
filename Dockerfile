@@ -5,6 +5,8 @@ WORKDIR /app
 RUN apt-get update && apt-get install
 
 COPY ./requirements.txt /app/requirements.txt
+RUN pip install -r /app/requirements.txt
+
 COPY ./src/exchange.py /app/exchange.py
 
 #COPY . /app
@@ -13,7 +15,5 @@ COPY ./src/exchange.py /app/exchange.py
 # ENV FLASK_RUN_HOST=0.0.0.0
 
 #EXPOSE 2222
-
-RUN pip install -r /app/requirements.txt
 
 CMD ["gunicorn", "--bind 0.0.0.0:2222", "--timeout=600", "exchange:app", "-w 1", "--threads 5"]
