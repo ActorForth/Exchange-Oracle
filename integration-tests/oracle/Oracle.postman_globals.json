@@ -1,0 +1,14 @@
+{
+	"id": "cf9d067a-dfcd-4482-86e2-869c1a32e891",
+	"values": [
+		{
+			"key": "host",
+			"value": "http://localhost:2222",
+			"enabled": true
+		}
+	],
+	"name": "Oracle Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2021-09-27T17:40:13.444Z",
+	"_postman_exported_using": "Postman/8.12.2"
+}
