@@ -44,7 +44,7 @@ class Tests:
     def test_denomination_not_available(self):
             
         # denomination = "thb"
-        url = f"/api/get_rate/thb"
+        url = f"/api/get_rate/THB"
         
         flask_app = app
         with flask_app.test_client(self) as test_client:
@@ -58,13 +58,13 @@ class Tests:
     def test_get_thb(self):
             
         # denomination = "thb"
-        url = f"/api/get_rate/thb"
+        url = f"/api/get_rate/THB"
         
         thb_rate = {
                     "last": 20000
                 }
         
-        rates.add_rate("thb", thb_rate)
+        rates.add_rate("THB", thb_rate)
         
         flask_app = app
         with flask_app.test_client(self) as test_client:

@@ -9,6 +9,7 @@ import os
 from flask import Flask
 from flask_restful import Resource, Api
 
+from decimal import Decimal
 
 logging.basicConfig(filename='history.log', filemode='w', level=logging.DEBUG)
 
@@ -59,21 +60,23 @@ def rate_fetcher(rates): # pragma: no cover
             usd_json = usd_result.json()
             
             thb_rate = {
-                "last": str(thb_json["THB_BCH"]["last"]),
+                "last": int(Decimal(str(thb_json["THB_BCH"]["last"])) * 100),
+                "multiplier": 100,
                 "raw": thb_json,
                 "from": bitkub_url,
-                "timestamp": time.time()
+                "timestamp": int(time.time())
             }
             
             usd_rate = {
-                "last": usd_json["last"],
+                "last": int(Decimal(str(usd_json["last"])) * 100),
+                "multiplier": 100,
                 "raw": usd_json,
                 "from": usd_exchange_rate_url,
-                "timestamp": usd_json["timestamp"]
+                "timestamp": int(usd_json["timestamp"])
             }
             
-            rates.add_rate("thb", thb_rate)
-            rates.add_rate("usd", usd_rate)
+            rates.add_rate("THB", thb_rate)
+            rates.add_rate("USD", usd_rate)
         except Exception as err:
             logging.debug(f"An error occurred: {err}")
             pass
@@ -92,7 +95,13 @@ class GetRate(Resource):
         if not rate:
             return {"message": "This denomination is not available"}, 404
         
-        return {"last": rate["last"]}, 200
+        result = {
+            "last": rate["last"],
+            "multiplier": rate["multiplier"],
+            "timestamp": rate["timestamp"]
+        }
+        
+        return result, 200
 
 
 class Exchange(Flask):  # pragma: no cover
