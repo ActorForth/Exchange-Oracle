@@ -1,3 +1,3 @@
 #!/bin/bash
-app="oracle-image"
-docker build -t ${app} .
+app="crypto-oracle"
+docker build -t ${app}:$(git describe --always --tags --dirty --abbrev=7) .
