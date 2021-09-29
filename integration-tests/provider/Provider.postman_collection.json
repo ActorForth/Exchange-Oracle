@@ -118,7 +118,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"amount\": 100, \"denomination\": \"THB\"}",
+					"raw": "{\"amount\": \"100\", \"denomination\": \"THB\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -255,7 +255,221 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"amount\": 100, \"denomination\": \"USD\"}",
+					"raw": "{\"amount\": \"100\", \"denomination\": \"USD\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://crypto.dev.biggestfan.net/crypto-provider/api/order/{{guid}}",
+					"protocol": "https",
+					"host": [
+						"crypto",
+						"dev",
+						"biggestfan",
+						"net"
+					],
+					"path": [
+						"crypto-provider",
+						"api",
+						"order",
+						"{{guid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create order with float amount (Happy case) USD",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"order_id\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"order_amount\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"order_denomination\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"status\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"address\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"time_created\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"bch_exchange_rate_for_order\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"bch_amount_requested\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"bch_amount_received\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"bch_amount_remaining\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"bch_amount_overpayment\": {",
+							"            \"type\": \"string\"",
+							"        },",
+							"        \"bch_transactions\": {",
+							"            \"type\": \"array\"",
+							"        },",
+							"        \"uri\": {",
+							"            \"type\": \"string\"",
+							"        }     ",
+							"    },",
+							"    \"required\": [",
+							"                \"order_id\",",
+							"        \"order_amount\",",
+							"        \"order_denomination\",",
+							"        \"status\",",
+							"        \"address\",",
+							"        \"time_created\",",
+							"        \"bch_exchange_rate_for_order\",",
+							"        \"bch_amount_requested\",",
+							"        \"bch_amount_received\",",
+							"        \"bch_amount_remaining\",",
+							"        \"bch_amount_overpayment\",",
+							"        \"bch_transactions\",",
+							"        \"uri\"",
+							"    ]",
+							"}",
+							"",
+							"pm.test(\"Validate jsonSchema\" , () => {",
+							"    pm.response.to.have.jsonSchema(schema)",
+							"})",
+							"",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Check order id\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.order_id).to.eql(pm.variables.get(\"guid\"));",
+							"});",
+							"",
+							"pm.test(\"Check order amount\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.order_amount).to.eql(\"0.5\");",
+							"});",
+							"",
+							"pm.test(\"Check order currency\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.order_denomination).to.eql(\"USD\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"guid\" , pm.variables.replaceIn(\"{{$guid}}\"))",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"amount\": \"0.5\", \"denomination\": \"USD\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://crypto.dev.biggestfan.net/crypto-provider/api/order/{{guid}}",
+					"protocol": "https",
+					"host": [
+						"crypto",
+						"dev",
+						"biggestfan",
+						"net"
+					],
+					"path": [
+						"crypto-provider",
+						"api",
+						"order",
+						"{{guid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create order with 0 amount (Bad case) USD",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"error\": {",
+							"            \"type\": \"string\"",
+							"        }",
+							"    },",
+							"    \"required\": [",
+							"        \"error\"",
+							"    ]",
+							"}",
+							"",
+							"pm.test(\"Validate jsonSchema\" , () => {",
+							"    pm.response.to.have.jsonSchema(schema)",
+							"})",
+							"",
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Amount must be greater than 0\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"guid\" , pm.variables.replaceIn(\"{{$guid}}\"))",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"amount\": \"0.0\", \"denomination\": \"USD\"}",
 					"options": {
 						"raw": {
 							"language": "json"
