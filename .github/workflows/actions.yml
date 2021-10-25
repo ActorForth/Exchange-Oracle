@@ -2,7 +2,7 @@
 name: Functional test
 on: [push]
 jobs:
-rRun-test-on-newman:
+  run-test-on-newman:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
