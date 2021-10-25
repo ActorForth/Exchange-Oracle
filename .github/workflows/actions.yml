@@ -14,7 +14,7 @@ jobs:
       - name: Creare bitcoin-bridging network
         run: docker network create bitcoin-bridging
       - name: Run crypto-oracle container
-        run: cd exchange-oracle && docker-compose up
+        run: cd exchange-oracle && docker-compose up -d
       - name: install newman
         run: npm install
       - name: Run newman
