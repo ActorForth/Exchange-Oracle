@@ -1,13 +1,24 @@
 
-name: actions
+name: Functional test
 on: [push]
 jobs:
-  check-bats-version:
+  Setup Newman:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+      - name: install newman
+      - run: npm install
+
+jobs:
+  Run test on Newman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Run test
+      - run: npx 
