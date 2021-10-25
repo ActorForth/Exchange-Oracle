@@ -1,4 +1,3 @@
-
 name: Functional test
 
 on: [push]
@@ -9,9 +8,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
       - name: install newman
-      - run: npm install
+        run: npm install
       - name: Run newman
-      - run: npx newman run integration-tests/oracle/Get_Exchange_rate.postman_collection.json -g integration-tests/oracle/Oracle.postman_globals.json
+        run: npx newman run integration-tests/oracle/Get_Exchange_rate.postman_collection.json -g integration-tests/oracle/Oracle.postman_globals.json
 
 
