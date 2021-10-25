@@ -2,7 +2,7 @@
 name: Functional test
 on: [push]
 jobs:
-  Setup Newman:
+  Run test on Newman:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -11,14 +11,5 @@ jobs:
           node-version: '14'
       - name: install newman
       - run: npm install
-
-jobs:
-  Run test on Newman:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      - name: Run test
-      - run: npx 
+      - name: Run newman
+      - run: npx newman run integration-tests/oracle/Get_Exchange_rate.postman_collection.json -g integration-tests/oracle/Oracle.postman_globals.json
