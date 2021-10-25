@@ -11,8 +11,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: Run crypto oracle
+      - name: Access to crypto oracle folder
         run: cd exchange-oracle
+      - name: Run container  
         run: docker-compose up
       - name: install newman
         run: npm install
