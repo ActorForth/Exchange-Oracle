@@ -61,7 +61,9 @@ class Tests:
         url = f"/api/get_rate/THB"
         
         thb_rate = {
-                    "last": 20000
+                    "last": 20000,
+                    "multiplier": 100,
+                    "timestamp": 2000000
                 }
         
         rates.add_rate("THB", thb_rate)
@@ -73,5 +75,5 @@ class Tests:
             result = json.loads(response.get_data(as_text=True))
             
             assert response.status_code == 200
-            assert result == {'last': 20000}
+            assert result == thb_rate
             
