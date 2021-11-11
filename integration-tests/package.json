@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx newman run"
+    "test": "npx newman run oracle/Get_Exchange_rate.postman_collection.json -g oracle/Oracle.postman_globals.json"
   },
   "keywords": [],
   "author": "",

@@ -1,6 +1,14 @@
 name: Functional test
 
-on: [push]
+on:
+  push:
+    branches:
+      - add-integration-test
+      - develop
+      - master
+
+  workflow_dispatch:
+
 
 jobs:
   test-on-newman:
@@ -18,6 +26,6 @@ jobs:
       - name: install newman
         run: npm install
       - name: Run newman
-        run: npx newman run integration-tests/oracle/Get_Exchange_rate.postman_collection.json -g integration-tests/oracle/Oracle.postman_globals.json
+        run: npm test
 
 
