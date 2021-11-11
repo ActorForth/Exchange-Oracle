@@ -24,8 +24,8 @@ jobs:
       - name: Run crypto-oracle container
         run: cd exchange-oracle && docker-compose up -d
       - name: install newman
-        run: npm install
+        run: cd ./integration-tests && npm install
       - name: Run newman
-        run: npm test
+        run: cd ./integration-tests && npm test
 
 
