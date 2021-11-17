@@ -23,12 +23,8 @@ jobs:
         run: docker network create bitcoin-bridging
       - name: Run crypto-oracle container
         run: cd exchange-oracle && docker-compose up -d
-      - name: install dependencies
-        run: pip install --user pipenv
-      - name: Pipenv shell
-        run: cd ./exchange-oracle && pipenv shell
-      - name: pipenv install
-        run: cd ./exchange-oracle && pipenv install
+      - name: install requirements
+        run: cd ./exchange-oracle && pip install -r requirements.txt
       - name: run unit test
         run: cd ./exchange-oracle && python3 run_tests.py 
       - name: install newman
