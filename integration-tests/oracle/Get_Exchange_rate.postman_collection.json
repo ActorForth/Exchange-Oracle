@@ -1,0 +1,191 @@
+{
+	"info": {
+		"_postman_id": "d7bb5947-47e5-487b-a273-890faadfded7",
+		"name": "Get Exchange rate",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get exchange rate for THB",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"last\": {",
+							"            \"type\": \"integer\"",
+							"        },",
+							"        \"multiplier\": {",
+							"            \"type\": \"integer\"",
+							"        },",
+							"        \"timestamp\": {",
+							"            \"type\": \"integer\"",
+							"        }",
+							"    },",
+							"    \"required\": [",
+							"        \"last\",",
+							"        \"multiplier\",",
+							"        \"timestamp\"",
+							"    ]",
+							"}",
+							"",
+							"pm.test(\"Validate JsonSchema\" , () => {",
+							"    pm.response.to.have.jsonSchema(schema)",
+							"})",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/get_rate/THB",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"get_rate",
+						"THB"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get exchange rate for USD",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"last\": {",
+							"            \"type\": \"integer\"",
+							"        },",
+							"        \"multiplier\": {",
+							"            \"type\": \"integer\"",
+							"        },",
+							"        \"timestamp\": {",
+							"            \"type\": \"integer\"",
+							"        }",
+							"    },",
+							"    \"required\": [",
+							"        \"last\",",
+							"        \"multiplier\",",
+							"        \"timestamp\"",
+							"    ]",
+							"}",
+							"",
+							"pm.test(\"Validate JsonSchema\" , () => {",
+							"    pm.response.to.have.jsonSchema(schema)",
+							"})",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/get_rate/USD",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"get_rate",
+						"USD"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get exchange rate for empty input",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/get_rate/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"get_rate",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get exchange rate for currency that doesn't exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"This denomination is not available\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/get_rate/TEST",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"get_rate",
+						"TEST"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

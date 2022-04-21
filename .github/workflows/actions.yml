@@ -1,0 +1,35 @@
+name: Functional test
+
+on:
+  push:
+    branches:
+      - feature/add-integration-test
+      - develop
+      - master
+
+  workflow_dispatch:
+
+
+jobs:
+  test-on-newman:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Creare bitcoin-bridging network
+        run: docker network create bitcoin-bridging
+      - name: Run crypto-oracle container
+        run: cd exchange-oracle && docker-compose up -d
+      - name: install requirements
+        run: cd ./exchange-oracle && pip install -r requirements.txt
+      - name: run unit test
+        run: cd ./exchange-oracle && python3 run_tests.py 
+      - name: install newman
+        run: cd ./integration-tests && npm install
+      - name: Run newman
+        run: cd ./integration-tests && npm test
+
+

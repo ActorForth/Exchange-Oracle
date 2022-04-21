@@ -10,7 +10,6 @@ def main():  # pragma: no cover
 
     subprocess.call(["coverage", "combine", "--append"])
     subprocess.call(["coverage", "report", "-m"])
-    input("\n\nPress enter to quit ")
 
 
 if __name__ == "__main__":  # pragma: no cover
